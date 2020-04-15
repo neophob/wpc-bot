@@ -3,15 +3,16 @@ const path = require('path');
 const Emulator = require('wpc-emu');
 const Jimp = require('jimp');
 const debug = require('debug')('bot');
+const twitter = require('./twitter');
 
 const GAME_TO_LOAD = 'WPC-Fliptronics: Fish Tales';
 //const GAME_TO_LOAD = 'WPC-95: Attack from Mars';
 const CPU_STEPS = 16;
 const DMD_WIDTH = 128;
 const DMD_HEIGHT = 32;
-const KEYPRESS_TICKS = 50000;
+const KEYPRESS_TICKS = 100000;
 
-const closedSwitchRaw = process.env.CLOSEDSW || '15,16,17';
+const closedSwitchRaw = process.env.CLOSEDSW || '15,16,17,21';
 const switchBlacklist = closedSwitchRaw.split(',').map((n) => parseInt(n, 10));
 switchBlacklist.push(21);
 
@@ -40,18 +41,17 @@ function bootEmu() {
 }
 
 function grabDMDFrame(wpcSystem) {
-  let ticks = parseInt(5000000 + Math.random() * 50000000, 10);
+  let ticks = parseInt(5000000 + Math.random() * 150000000, 10);
   debug('TICKS:', ticks)
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     try {
       let input = parseInt(11 + (Math.random() * 77), 10);
       if (switchBlacklist.includes(input)) {
         input = 13;
       }
       debug('setSwitchInput:', input)
-
       wpcSystem.setSwitchInput(input);
       wpcSystem.executeCycle(KEYPRESS_TICKS, CPU_STEPS);
       wpcSystem.setSwitchInput(input);
@@ -106,6 +106,7 @@ function savePng(data) {
         console.error('WRITE IMAGE FAILED', err);
         throw err;
       }
+      twitter.post();
     });
   });
 }
@@ -122,6 +123,7 @@ bootEmu()
 
     // enter money
     wpcSystem.setCabinetInput(2);
+    wpcSystem.executeCycle(KEYPRESS_TICKS, CPU_STEPS);
 
     // start game
     wpcSystem.setSwitchInput(13);
