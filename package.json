@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/neophob/wpc-bot#readme",
   "dependencies": {
+    "jimp": "^0.10.2",
     "wpc-emu": "^0.34.5"
   }
 }
