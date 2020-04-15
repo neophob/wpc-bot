@@ -1,0 +1,24 @@
+{
+  "name": "wpc-bot",
+  "version": "1.0.0",
+  "description": "Twitter Bot",
+  "main": "index.js",
+  "scripts": {
+    "dbg": "env DEBUG=\"*\" node index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neophob/wpc-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neophob/wpc-bot/issues"
+  },
+  "homepage": "https://github.com/neophob/wpc-bot#readme",
+  "dependencies": {
+    "wpc-emu": "^0.34.5"
+  }
+}
