@@ -35,7 +35,10 @@ function grabDMDFrame(wpcSystem) {
   const ticks = parseInt(Math.random() * 5000000, 10);
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
-  console.log('wpcSystem.getState().display.dmdShadedBuffer', wpcSystem.getState().display.dmdShadedBuffer);
+  const frame = wpcSystem.getState().asic.display.dmdShadedBuffer;
+  //TODO bail out if image is boring
+
+  console.log('wpcSystem.getState().display.dmdShadedBuffer', frame);
 }
 
 bootEmu()
@@ -48,7 +51,7 @@ bootEmu()
     wpcSystem.setCabinetInput(16);
     wpcSystem.executeCycle(HALF_SECOND_TICKS, CPU_STEPS);
 
-    mainLoop(wpcSystem);
+    grabDMDFrame(wpcSystem);
   })
   .catch((err) => {
     console.error('NO GOOD!', err);
