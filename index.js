@@ -2,13 +2,18 @@ const fs = require('fs');
 const path = require('path');
 const Emulator = require('wpc-emu');
 const Jimp = require('jimp');
+const debug = require('debug')('bot');
 
 const GAME_TO_LOAD = 'WPC-Fliptronics: Fish Tales';
 //const GAME_TO_LOAD = 'WPC-95: Attack from Mars';
 const CPU_STEPS = 16;
-
 const DMD_WIDTH = 128;
 const DMD_HEIGHT = 32;
+const KEYPRESS_TICKS = 50000;
+
+const closedSwitchRaw = process.env.CLOSEDSW || '15,16,17';
+const switchBlacklist = closedSwitchRaw.split(',').map((n) => parseInt(n, 10));
+switchBlacklist.push(21);
 
 function loadFile(fileName) {
   return new Promise((resolve, reject) => {
@@ -35,14 +40,44 @@ function bootEmu() {
 }
 
 function grabDMDFrame(wpcSystem) {
-  const ticks = parseInt(Math.random() * 5000000, 10);
+  let ticks = parseInt(5000000 + Math.random() * 50000000, 10);
+  debug('TICKS:', ticks)
+  wpcSystem.executeCycle(ticks, CPU_STEPS);
+
+  for (let i = 0; i < 2; i++) {
+    try {
+      let input = parseInt(11 + (Math.random() * 77), 10);
+      if (switchBlacklist.includes(input)) {
+        input = 13;
+      }
+      debug('setSwitchInput:', input)
+
+      wpcSystem.setSwitchInput(input);
+      wpcSystem.executeCycle(KEYPRESS_TICKS, CPU_STEPS);
+      wpcSystem.setSwitchInput(input);
+    } catch (error) {}
+  }
+
+  ticks = parseInt(Math.random() * 50000000, 10);
+  debug('TICKS:', ticks)
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
   const frame = wpcSystem.getState().asic.display.dmdShadedBuffer;
+  const filledPixelCounter = frame.reduce((accumulator, currentValue) => {
+    if (currentValue === 0) {
+      return accumulator;
+    }
+    return accumulator + 1;
+  }, 0);
+
+  if (filledPixelCounter < 200) {
+    debug('BORING', filledPixelCounter);
+    return false;
+  }
+  debug('filledPixelCounter', filledPixelCounter)
   //TODO bail out if image is boring
 
-  savePng(frame)
-  console.log('wpcSystem.getState().display.dmdShadedBuffer', frame);
+  return frame;
 }
 
 function savePng(data) {
@@ -51,6 +86,7 @@ function savePng(data) {
   const PALETTE_B = [0, 67,  93, 211];
   new Jimp(DMD_WIDTH, DMD_HEIGHT, '#000000', (err, image) => {
     if (err) {
+      console.error('CREATE IMAGE FAILED', err);
       throw err;
     }
     let srcOffset = 0;
@@ -65,7 +101,12 @@ function savePng(data) {
         image.bitmap.data[dstOffset++] = 255;
       }
     }
-    image.write('./out.png');
+    image.write('./out.png', (err, image) => {
+      if (err) {
+        console.error('WRITE IMAGE FAILED', err);
+        throw err;
+      }
+    });
   });
 }
 
@@ -79,7 +120,22 @@ bootEmu()
     wpcSystem.setCabinetInput(16);
     wpcSystem.executeCycle(HALF_SECOND_TICKS, CPU_STEPS);
 
+    // enter money
+    wpcSystem.setCabinetInput(2);
+
+    // start game
+    wpcSystem.setSwitchInput(13);
+    wpcSystem.executeCycle(KEYPRESS_TICKS, CPU_STEPS);
+    wpcSystem.setSwitchInput(13);
+
     grabDMDFrame(wpcSystem);
+
+    let dmdFrame = false;
+    while (!dmdFrame) {
+      dmdFrame = grabDMDFrame(wpcSystem);
+    }
+    savePng(dmdFrame);
+
   })
   .catch((err) => {
     console.error('NO GOOD!', err);

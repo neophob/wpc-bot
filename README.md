@@ -1,2 +1,2 @@
 # wpc-bot
-Twitter Bot
+Twitter Bot - an AWS Playground

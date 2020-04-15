@@ -4,7 +4,7 @@
   "description": "Twitter Bot",
   "main": "index.js",
   "scripts": {
-    "dbg": "env DEBUG=\"*\" node index.js",
+    "dbg": "env DEBUG=\"bot\" node index.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/neophob/wpc-bot#readme",
   "dependencies": {
+    "debug": "^4.1.1",
     "jimp": "^0.10.2",
     "wpc-emu": "^0.34.5"
   }
