@@ -1,5 +1,6 @@
 const Twit = require('twit');
 const fs = require('fs');
+const debug = require('debug')('bot:twitter');
 
 const T = new Twit({
   consumer_key:         process.env.TWITTER_CONSUMER_KEY,
@@ -44,7 +45,7 @@ function post(text) {
           console.error('ERR media/metadata/create', err);
           process.exit(1);
         }
-        console.log(data);
+        debug(data);
       });
     });
   });
