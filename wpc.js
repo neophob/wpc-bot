@@ -93,6 +93,15 @@ function grabDMDFrame(wpcSystem) {
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
   const frame = wpcSystem.getState().asic.display.dmdShadedBuffer;
+
+  if (imageIsEmpty(frame)) {
+    return false;
+  }
+
+  return frame;
+}
+
+function imageIsEmpty(frame) {
   const filledPixelCounter = frame.reduce((accumulator, currentValue) => {
     if (currentValue === 0) {
       return accumulator;
@@ -100,10 +109,6 @@ function grabDMDFrame(wpcSystem) {
     return accumulator + 1;
   }, 0);
 
-  if (filledPixelCounter < 200) {
-    debug('BORING', filledPixelCounter);
-    return false;
-  }
-  debug('filledPixelCounter', filledPixelCounter)
-  return frame;
+  debug('filledPixelCounter', filledPixelCounter);
+  return filledPixelCounter < 200;
 }

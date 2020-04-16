@@ -46,7 +46,6 @@ wpc.getRawScreenshot()
     return savePng(rawScreenshot)
   })
   .then((pngImage) => {
-    console.log('AA', typeof pngImage)
     return twitter.post(pngImage, 'f00 bar!');
   })
   .catch((err) => {

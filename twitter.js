@@ -22,7 +22,7 @@ function post(pngImage, text) {
       if (err) {
         return reject(err);
       }
-      debug('uploaded', response);
+      debug('uploaded');
 
       const mediaIdStr = data.media_id_string;
       const params = { status: text, media_ids: [mediaIdStr] }
