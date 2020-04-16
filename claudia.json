@@ -1,0 +1,7 @@
+{
+  "lambda": {
+    "role": "pinball-bot-ft-executor",
+    "name": "pinball-bot-ft",
+    "region": "eu-central-1"
+  }
+}

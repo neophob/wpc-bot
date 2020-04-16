@@ -6,7 +6,9 @@
   "scripts": {
     "dbg": "env DEBUG=\"bot\" node index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "claudia:init": "claudia create --region eu-central-1 --memory 1024 --name pinball-bot-ft --timeout 120 --description 'PINBALL EMU' --handler index.handler",
+    "claudia:kill": "claudia destroy",
+    "deploy": "claudia update"
   },
   "repository": {
     "type": "git",

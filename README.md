@@ -20,5 +20,10 @@ TWITTER_CONSUMER_KEY=.. TWITTER_CONSUMER_SECRET=.. TWITTER_ACCESS_TOKEN=.. TWITT
 - how to deploy properly without upload a zip file / upload to s3 -> how to autodeploy latest release from github?
 - use AWS Lambda Layers (to keep deployment packages small)
 
+### Deploy Serverless
+- NOT Tested: https://serverless.com/, `npm install serverless -g`
+- Use: https://claudiajs.com/, `npm install claudia -g`
+
 ### Notes
-- CloudWatch triggers the Lambda function, scheduled once per hour
+- CloudWatch triggers the Lambda function, scheduled once per hour (or use `claudia add-scheduled-event`)
+- Create AWS Lambda layers: "node_modules" and "rom" are independent layers -> failed to test!
