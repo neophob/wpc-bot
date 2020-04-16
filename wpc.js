@@ -53,12 +53,13 @@ function getRawScreenshot() {
 
         'the active display scanline is ' + wpcState.asic.display.scanline,
         'the active display page is ' + wpcState.asic.display.activepage,
-      ]
+      ];
 
-      debug('randomFacts',randomFacts)
+      debug('randomFacts', randomFacts);
+      const facts = 3 + parseInt(Math.random() * 4, 10);
       let description = GAME_TO_LOAD;
-      for (let i=0; i<4; i++) {
-        n = parseInt(Math.random() * randomFacts.length, 10);
+      for (let i = 0; i < facts; i++) {
+        const n = parseInt(Math.random() * randomFacts.length, 10);
         description += ', ' + randomFacts[n];
       }
       description += '.';
@@ -99,14 +100,14 @@ function grabDMDFrame(wpcSystem) {
   debug('TICKS:', ticks);
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
-  const switchToggles = parseInt(Math.random() * 6, 10)
+  const switchToggles = parseInt(Math.random() * 6, 10);
   for (let i = 0; i < switchToggles; i++) {
     try {
       let input = parseInt(11 + (Math.random() * 77), 10);
       if (switchBlacklist.includes(input)) {
         input = 13;
-      };
-      debug('setSwitchInput:', input)
+      }
+      debug('setSwitchInput:', input);
       wpcSystem.setSwitchInput(input);
       wpcSystem.executeCycle(KEYPRESS_TICKS, CPU_STEPS);
       wpcSystem.setSwitchInput(input);
@@ -114,7 +115,7 @@ function grabDMDFrame(wpcSystem) {
   }
 
   ticks = parseInt(Math.random() * 50000000, 10);
-  debug('TICKS:', ticks)
+  debug('TICKS:', ticks);
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
   const frame = wpcSystem.getState().asic.display.dmdShadedBuffer;

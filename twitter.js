@@ -25,7 +25,7 @@ function post(pngImage, text) {
       debug('uploaded');
 
       const mediaIdStr = data.media_id_string;
-      const params = { status: text, media_ids: [mediaIdStr] }
+      const params = { status: text, media_ids: [mediaIdStr] };
       twit.post('statuses/update', params, function (err, data, response) {
         if (err) {
           return reject(err);
