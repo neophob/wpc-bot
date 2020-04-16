@@ -30,12 +30,11 @@ function savePng(rawScreenshot) {
       }
       image.resize(800, Jimp.AUTO, Jimp.RESIZE_NEAREST_NEIGHBOR);
 
-      //TODO use image.getBuffer(Jimp.MIME_PNG, (err, image) => {});
-      image.write('./out.png', (err, image) => {
+      image.getBuffer(Jimp.MIME_PNG, (err, image) => {
         if (err) {
           return reject(err);
         }
-        resolve();
+        resolve(image);
       });
     });
 
@@ -46,8 +45,9 @@ wpc.getRawScreenshot()
   .then((rawScreenshot) => {
     return savePng(rawScreenshot)
   })
-  .then(() => {
-    return twitter.post('f00 bar!');
+  .then((pngImage) => {
+    console.log('AA', typeof pngImage)
+    return twitter.post(pngImage, 'f00 bar!');
   })
   .catch((err) => {
     console.error('NO GOOD!', err);

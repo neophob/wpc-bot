@@ -1,5 +1,4 @@
 const Twit = require('twit');
-const fs = require('fs');
 const debug = require('debug')('bot:twitter');
 
 const twit = new Twit({
@@ -15,12 +14,11 @@ module.exports = {
   post,
 };
 
-function post(text) {
+function post(pngImage, text) {
   return new Promise((resolve, reject) => {
-    const b64content = fs.readFileSync('./out.png', { encoding: 'base64' });
+    const pngImageBase64Encoded = pngImage.toString('base64');
 
-    // first we must post the media to Twitter
-    twit.post('media/upload', { media_data: b64content }, (err, data, response) => {
+    twit.post('media/upload', { media_data: pngImageBase64Encoded }, (err, data, response) => {
       if (err) {
         return reject(err);
       }
