@@ -29,6 +29,8 @@ function savePng(rawScreenshot) {
         }
       }
       image.resize(800, Jimp.AUTO, Jimp.RESIZE_NEAREST_NEIGHBOR);
+
+      //TODO use image.getBuffer(Jimp.MIME_PNG, (err, image) => {});
       image.write('./out.png', (err, image) => {
         if (err) {
           return reject(err);
@@ -45,7 +47,7 @@ wpc.getRawScreenshot()
     return savePng(rawScreenshot)
   })
   .then(() => {
-    twitter.post('f00 bar!');
+    return twitter.post('f00 bar!');
   })
   .catch((err) => {
     console.error('NO GOOD!', err);

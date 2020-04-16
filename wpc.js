@@ -74,7 +74,8 @@ function grabDMDFrame(wpcSystem) {
   debug('TICKS:', ticks);
   wpcSystem.executeCycle(ticks, CPU_STEPS);
 
-  for (let i = 0; i < 3; i++) {
+  const switchToggles = parseInt(Math.random() * 6, 10)
+  for (let i = 0; i < switchToggles; i++) {
     try {
       let input = parseInt(11 + (Math.random() * 77), 10);
       if (switchBlacklist.includes(input)) {
