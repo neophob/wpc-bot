@@ -41,12 +41,15 @@ function savePng(rawScreenshot) {
   });
 }
 
+let tweetText = '';
+
 wpc.getRawScreenshot()
-  .then((rawScreenshot) => {
-    return savePng(rawScreenshot)
+  .then(({dmdFrame, description}) => {
+    tweetText = description;
+    return savePng(dmdFrame);
   })
   .then((pngImage) => {
-    return twitter.post(pngImage, 'f00 bar!');
+    return twitter.post(pngImage, tweetText);
   })
   .catch((err) => {
     console.error('NO GOOD!', err);

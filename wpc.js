@@ -36,8 +36,11 @@ function getRawScreenshot() {
       while (!dmdFrame) {
         dmdFrame = grabDMDFrame(wpcSystem);
       }
+      const wpcState = wpcSystem.getState();
+      const runtime = parseInt(wpcState.cpuState.tickCount / 2000000, 10) + 's';
+      const description = GAME_TO_LOAD + ' running ' + runtime;
 
-      return dmdFrame;
+      return { dmdFrame, description };
     });
 }
 
@@ -97,7 +100,9 @@ function grabDMDFrame(wpcSystem) {
   if (imageIsEmpty(frame)) {
     return false;
   }
-
+  if (!imageContainsAtLeast3Colors(frame)) {
+    return false;
+  }
   return frame;
 }
 
@@ -111,4 +116,13 @@ function imageIsEmpty(frame) {
 
   debug('filledPixelCounter', filledPixelCounter);
   return filledPixelCounter < 200;
+}
+
+function imageContainsAtLeast3Colors(frame) {
+  const count = [0, 0, 0, 0];
+  frame.forEach((color) => {
+    count[color]++;
+  });
+  debug('count', count);
+  return true;
 }
