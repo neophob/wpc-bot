@@ -37,9 +37,31 @@ function getRawScreenshot() {
         dmdFrame = grabDMDFrame(wpcSystem);
       }
       const wpcState = wpcSystem.getState();
-      const runtime = parseInt(wpcState.cpuState.tickCount / 2000000, 10) + 's';
-      const description = GAME_TO_LOAD + ' running ' + runtime;
 
+      const randomFacts = [
+        'running ' + parseInt(wpcState.cpuState.tickCount / 2000000, 10) + 's',
+        'CC register value is 0x' + wpcState.cpuState.regCC.toString(16),
+        'PC register value is 0x' + wpcState.cpuState.regPC.toString(16),
+
+        'the active ROM bank is ' + wpcState.asic.wpc.activeRomBank,
+        'diagnostic LED toggled ' + wpcState.asic.wpc.diagnosticLedToggleCount + ' times',
+        wpcState.asic.wpc.diagnosticLed ? 'diagnostic LED is on' : 'diagnostic LED is off',
+
+        'lamp row is ' + wpcState.asic.wpc.lampRow,
+        'lamp column is ' + wpcState.asic.wpc.lampColumn,
+        'zero cross counter: ' + wpcState.asic.wpc.ticksZeroCross,
+
+        'the active display scanline is ' + wpcState.asic.display.scanline,
+        'the active display page is ' + wpcState.asic.display.activepage,
+      ]
+
+      debug('randomFacts',randomFacts)
+      let description = GAME_TO_LOAD;
+      for (let i=0; i<4; i++) {
+        n = parseInt(Math.random() * randomFacts.length, 10);
+        description += ', ' + randomFacts[n];
+      }
+      description += '.';
       return { dmdFrame, description };
     });
 }
@@ -119,10 +141,22 @@ function imageIsEmpty(frame) {
 }
 
 function imageContainsAtLeast3Colors(frame) {
-  const count = [0, 0, 0, 0];
+  const pixelCounter = [0, 0, 0, 0];
   frame.forEach((color) => {
-    count[color]++;
+    pixelCounter[color]++;
   });
-  debug('count', count);
-  return true;
+  debug('pixelCounter', pixelCounter);
+
+  let count = 0;
+  if (pixelCounter[1] > 30) {
+    count++;
+  }
+  if (pixelCounter[2] > 30) {
+    count++;
+  }
+  if (pixelCounter[3] > 30) {
+    count++;
+  }
+
+  return count >= 2;
 }
