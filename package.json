@@ -7,6 +7,7 @@
     "dbg": "env DEBUG=\"bot\" node index.js",
     "start": "node index.js",
     "claudia:init": "claudia create --region eu-central-1 --memory 1024 --name pinball-bot-ft --timeout 120 --description 'PINBALL EMU' --handler index.handler",
+    "claudia:schedule": "claudia add-scheduled-event --rate \"1 hour\" --name pinball-bot-ft-scheduler --event empty.json",
     "claudia:kill": "claudia destroy",
     "deploy": "claudia update"
   },
