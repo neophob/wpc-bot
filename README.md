@@ -2,6 +2,7 @@
 Twitter Bot - an AWS Playground
 
 ## TODO
+
 - detect similar / identical images - aka avoid double posts
 - include more stuff on the image (matrix? RAM overview)
 - load state where the game is already started
