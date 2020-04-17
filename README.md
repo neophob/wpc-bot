@@ -7,12 +7,12 @@ Twitter Bot - an AWS Playground
 - load state where the game is already started
 
 ## Run Locally
-- You need a twitter dev account 
+- You need a twitter dev account
 - You need to create a `rom` directory and add the WPC roms yourself
 - change to the `lib` directory then run
 
 ```
-TWITTER_CONSUMER_KEY=.. TWITTER_CONSUMER_SECRET=.. TWITTER_ACCESS_TOKEN=.. TWITTER_ACCESS_TOKEN_SECRET=.. node index.js
+TWITTER_CONSUMER_KEY=.. TWITTER_CONSUMER_SECRET=.. TWITTER_ACCESS_TOKEN=.. TWITTER_ACCESS_TOKEN_SECRET=.. node run.js
 ```
 
 ## Run on AWS

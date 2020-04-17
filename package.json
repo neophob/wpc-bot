@@ -1,6 +1,6 @@
 {
   "name": "wpc-bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Twitter Bot",
   "main": "index.js",
   "scripts": {
@@ -26,5 +26,10 @@
     "jimp": "^0.10.2",
     "twit": "^2.2.11",
     "wpc-emu": "^0.34.5"
-  }
+  },
+  "files": [
+    "index.js",
+    "lib/*",
+    "rom/*"
+  ]
 }
