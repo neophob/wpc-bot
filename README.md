@@ -7,20 +7,18 @@ Twitter Bot - an AWS Playground
 - load state where the game is already started
 
 ## Run Locally
-You need a twitter dev account, change to the `lib` directory then run
+- You need a twitter dev account 
+- You need to create a `rom` directory and add the WPC roms yourself
+- change to the `lib` directory then run
 
 ```
 TWITTER_CONSUMER_KEY=.. TWITTER_CONSUMER_SECRET=.. TWITTER_ACCESS_TOKEN=.. TWITTER_ACCESS_TOKEN_SECRET=.. node index.js
 ```
 
 ## Run on AWS
-- how to deploy properly without upload a zip file / upload to s3 -> how to autodeploy latest release from github?
-- use AWS Lambda Layers (to keep deployment packages small)
+- CloudWatch triggers the Lambda function, scheduled once per hour (or use `claudia add-scheduled-event`)
+- TODO: Create AWS Lambda layers: "node_modules" and "rom" are independent layers -> failed to test!
 
 ### Deploy Serverless
-- NOT Tested: https://serverless.com/, `npm install serverless -g`
 - Use: https://claudiajs.com/, `npm install claudia -g`
-
-### Notes
-- CloudWatch triggers the Lambda function, scheduled once per hour (or use `claudia add-scheduled-event`)
-- Create AWS Lambda layers: "node_modules" and "rom" are independent layers -> failed to test!
+- NOT Tested: https://serverless.com/, `npm install serverless -g`
